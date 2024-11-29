@@ -1,0 +1,15 @@
+
+{
+  "name": "nvidia-chat",
+  "version": "1.0.0",
+  "description": "ChatGPT-like application using NVIDIA API",
+  "type": "module",
+  "main": "chat.js",
+  "scripts": {
+    "start": "node chat.js"
+  },
+  "dependencies": {
+    "openai": "^4.28.0",
+    "dotenv": "^16.4.1"
+  }
+}
