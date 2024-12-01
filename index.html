@@ -1,19 +1,26 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NVIDIA Chat Interface</title>
+    <title>Multiplayer Quiz</title>
     <link rel="stylesheet" href="css.css">
 </head>
 <body>
-    <div class="chat-container">
-        <div id="chat-output" class="chat-output"></div>
-        <div class="input-area">
-            <textarea id="user-input" placeholder="Geben Sie Ihre Nachricht ein..."></textarea>
-            <button id="send-button">Senden</button>
+    <div id="login-screen">
+        <h1>Multiplayer Quiz</h1>
+        <input type="text" id="username" placeholder="Benutzername">
+        <button onclick="joinGame()">Spiel beitreten</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <div id="question-container">
+            <h2 id="question"></h2>
+            <div id="answers"></div>
+        </div>
+        <div id="scoreboard">
+            <h3>Punktestand</h3>
+            <ul id="players-list"></ul>
         </div>
     </div>
-    <script src="js.js" type="module"></script>
+    <script src="js.js"></script>
 </body>
 </html>

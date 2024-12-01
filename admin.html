@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Admin</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <div class="admin-panel">
+        <h1>Quiz-Fragen erstellen</h1>
+        <form id="questionForm">
+            <input type="text" id="questionText" placeholder="Frage eingeben" required>
+            <input type="number" id="timeLimit" placeholder="Zeitlimit in Sekunden" required>
+            <div id="answers">
+                <input type="text" placeholder="Antwort 1" required>
+                <input type="text" placeholder="Antwort 2" required>
+                <input type="text" placeholder="Antwort 3" required>
+                <input type="text" placeholder="Antwort 4" required>
+            </div>
+            <select id="correctAnswer" required>
+                <option value="0">Antwort 1 ist richtig</option>
+                <option value="1">Antwort 2 ist richtig</option>
+                <option value="2">Antwort 3 ist richtig</option>
+                <option value="3">Antwort 4 ist richtig</option>
+            </select>
+            <button type="submit">Frage speichern</button>
+        </form>
+        <div id="questionsList"></div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>

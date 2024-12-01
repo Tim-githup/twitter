@@ -1,45 +1,42 @@
-/* ...existing code... */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
 
-.chat-container {
+.hidden {
+    display: none;
+}
+
+#login-screen {
+    text-align: center;
+    margin-top: 100px;
+}
+
+#game-screen {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 0 auto;
+}
+
+#question-container {
+    background: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.chat-output {
-    height: 400px;
-    border: 1px solid #ccc;
-    padding: 10px;
     margin-bottom: 20px;
-    overflow-y: auto;
-    background: #f9f9f9;
 }
 
-.input-area {
-    display: flex;
+#answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-top: 20px;
 }
 
-#user-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: vertical;
-    min-height: 40px;
-}
-
-#send-button {
-    padding: 10px 20px;
-    background: #2ecc71;
-    color: white;
+.answer-button {
+    padding: 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-#send-button:hover {
-    background: #27ae60;
+    font-size: 16px;
 }

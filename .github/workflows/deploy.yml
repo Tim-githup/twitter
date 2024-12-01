@@ -1,0 +1,30 @@
+
+name: Deploy Quiz Game
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Create env file
+      run: |
+        echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
+        echo "PORT=${{ secrets.PORT }}" >> .env
+        echo "WS_PORT=${{ secrets.WS_PORT }}" >> .env
+
+    # Hier könntest du weitere Deployment-Schritte hinzufügen
+    # z.B. für Heroku, Digital Ocean etc.

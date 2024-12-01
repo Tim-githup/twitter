@@ -1,52 +1,79 @@
-const chatOutput = document.getElementById('chat-output');
-const userInput = document.getElementById('user-input');
-const sendButton = document.getElementById('send-button');
+let socket;
+let username;
 
-sendButton.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-    }
-});
-
-async function sendMessage() {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    appendMessage('user', message);
-    userInput.value = '';
-
-    try {
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message })
-        });
-
-        const reader = response.body.getReader();
-        let accumulatedResponse = '';
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const text = new TextDecoder().decode(value);
-            accumulatedResponse += text;
-            appendMessage('assistant', text);
+function connectWebSocket() {
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const wsPort = process.env.WS_PORT || 3001;
+    socket = new WebSocket(`${wsProtocol}${window.location.hostname}:${wsPort}`);
+    
+    socket.onopen = () => {
+        if (username) {
+            socket.send(JSON.stringify({
+                type: 'join',
+                username: username
+            }));
         }
-    } catch (error) {
-        console.error('Error:', error);
-        appendMessage('error', 'Ein Fehler ist aufgetreten.');
+    };
+
+    socket.onclose = () => {
+        console.log('Verbindung unterbrochen. Versuche neu zu verbinden...');
+        setTimeout(connectWebSocket, 3000);
+    };
+
+    socket.onerror = (error) => {
+        console.error('WebSocket Fehler:', error);
+    };
+}
+
+function joinGame() {
+    username = document.getElementById('username').value;
+    if (!username) return alert('Bitte gib einen Benutzernamen ein');
+    connectWebSocket();
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('game-screen').classList.remove('hidden');
+}
+
+function handleGameEvents(data) {
+    switch(data.type) {
+        case 'question':
+            showQuestion(data.question);
+            break;
+        case 'scores':
+            updateScoreboard(data.scores);
+            break;
+        case 'error':
+            alert(data.message);
+            break;
     }
 }
 
-function appendMessage(role, content) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${role}`;
-    messageDiv.textContent = content;
-    chatOutput.appendChild(messageDiv);
-    chatOutput.scrollTop = chatOutput.scrollHeight;
+function showQuestion(questionData) {
+    document.getElementById('question').textContent = questionData.text;
+    const answersDiv = document.getElementById('answers');
+    answersDiv.innerHTML = '';
+    
+    questionData.answers.forEach((answer, index) => {
+        const button = document.createElement('button');
+        button.className = 'answer-button';
+        button.textContent = answer;
+        button.onclick = () => submitAnswer(index);
+        answersDiv.appendChild(button);
+    });
+}
+
+function submitAnswer(answerIndex) {
+    socket.send(JSON.stringify({
+        type: 'answer',
+        answer: answerIndex
+    }));
+}
+
+function updateScoreboard(scores) {
+    const list = document.getElementById('players-list');
+    list.innerHTML = '';
+    scores.forEach(score => {
+        const li = document.createElement('li');
+        li.textContent = `${score.username}: ${score.points}`;
+        list.appendChild(li);
+    });
 }
